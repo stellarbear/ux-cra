@@ -20,7 +20,7 @@ export interface IUX {
 
     setData: (key: UXKey) => (user: number, scenario: number, value: number | null) => void
     setExpert: (key: UXKey) => (scenario: number, value: number | null) => void
-    reset: () => void
+    reset: (users: number, scenarios: number) => void
 
     users: string[]
     scenarios: string[]
@@ -46,7 +46,7 @@ class UX implements IUX {
 
     addUser = (name: string = `User ${this.users.length}`) => {
         this.users = [...this.users, name];
-        this.data.forEach(o => o.addUser());
+        this.data.forEach(o => o.addUser(this.scenarios.length));
     }
     removeUser = (index: number) => {
         this.users = removeAt(this.users, index);
@@ -62,11 +62,14 @@ class UX implements IUX {
         this.data.forEach(o => o.removeScenario(index));
     }
     setUsersAndScenarios = (users: number, scenarios: number) => {
-        this.reset();
-        this.users = [];
-        this.scenarios = [];
-        Array.from({ length: users }).forEach(u => this.addUser());
-        Array.from({ length: scenarios }).forEach(s => this.addScenario());
+        this.reset(users, scenarios);
+        this.users = this.users.slice(0, users);
+        this.scenarios = this.scenarios.slice(0, scenarios);
+
+        const usersLeft = users - this.users.length;
+        const scenariosLeft = scenarios - this.scenarios.length;
+        Array.from({ length: usersLeft }).forEach(u => this.addUser());
+        Array.from({ length: scenariosLeft }).forEach(s => this.addScenario());
     }
 
     changeUser = (index: number, name: string) => {
@@ -83,7 +86,7 @@ class UX implements IUX {
     getData = (key: UXKey) => this.observations[key].data;
     getExpert = (key: UXKey) => this.observations[key].expert;
     
-    reset = () => this.data.forEach(o => o.reset());
+    reset = (users: number, scenarios: number) => this.data.forEach(o => o.reset(users, scenarios));
 }
 
 decorate(UX, {

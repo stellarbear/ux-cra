@@ -22,3 +22,17 @@ const Home: React.FC = () => {
 }
 
 export default Home;
+
+/*
+
+		<Grid
+			container>
+			<Grid item md={12} lg={6}>
+				<DataManagement />
+				<DataMetrics />
+			</Grid>
+			<Grid item md={12} lg={6}>
+				<DataChart />
+			</Grid>
+		</Grid >
+*/

@@ -2,14 +2,14 @@ import { removeAt } from "auxiliary/array";
 import { decorate, observable, action } from "mobx";
 
 export interface IObservation {
-    addUser: () => void
+    addUser: (scenarios: number) => void
     addScenario: () => void
     removeUser: (index: number) => void
     removeScenario: (index: number) => void
 
     setExpert: (scenario: number, value: number | null) => void
     setData: (user: number, scenario: number, value: number | null) => void
-    reset: () => void
+    reset: (users: number, scenarios: number) => void
 
     expert: (number | null)[]
     data: (number | null)[][]
@@ -40,8 +40,8 @@ export class Observation implements IObservation {
         this.allowNegative = allowNegative;
     }
 
-    addUser = () => {
-        this.data = [...this.data, []];
+    addUser = (scenarios: number) => {
+        this.data = [...this.data, Array(scenarios).fill(null)];
     }
     removeUser = (index: number) => {
         this.data = removeAt(this.data, index);
@@ -89,9 +89,10 @@ export class Observation implements IObservation {
         this.data[user][scenario] = this.validate(value);
     }
 
-    reset = () => {
-        this.data = [];
-        this.expert = [];
+    reset = (users: number, scenarios: number) => {
+        this.data = this.data.slice(0, users);
+        this.data.forEach(scenario => scenario = scenario.slice(0, scenarios));
+        this.expert = this.expert.slice(0, scenarios);
     }
 }
 
