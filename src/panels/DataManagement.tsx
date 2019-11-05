@@ -42,9 +42,9 @@ const DataManagement: React.FC<IDataManagementProps> = () => {
                             </IconButton>
 
                             <label htmlFor="export-ux">
-                                <Button component="span">
+                                <IconButton component="span" color="primary">
                                     <CloudDownload />
-                                </Button>
+                                </IconButton>
                             </label>
                             <input hidden type="file" id="export-ux"
                                 onChange={onImport}
