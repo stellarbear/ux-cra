@@ -1,41 +1,57 @@
 import React from 'react';
-import { Grid, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Tabs, Tab, Card, Typography } from '@material-ui/core';
+import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Card, Typography, makeStyles, Theme, createStyles } from '@material-ui/core';
 
 import { ExpandMore } from '@material-ui/icons';
 import { ModelProvider } from 'components/wrappers/ModelWrapper';
-import { AMetrics } from 'model/metric';
-import { AChart } from 'model/chart';
 import { observer } from 'mobx-react-lite';
+import { AChart } from 'model/chart';
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        card: {
+            margin: 8, minWidth: 600
+        },
+        header: {
+            display: "flex", alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%", height: 48
+        },
+        panel: {
+            padding: 0,
+        },
+        details: {
+            display: "flex", flexDirection: "column"
+        },
+        chart: {
+            display: "flex", flexDirection: "row",
+            alignItems: "center",
+        }
+    })
+);
 
 interface IDataChartProps { }
 
 const DataChart: React.FC<IDataChartProps> = observer(() => {
     const { model, uxKey } = React.useContext(ModelProvider);
+    const classes = useStyles();
 
     const charts = AChart.for(uxKey);
 
     return (
-        <Card style={{ margin: 8, minWidth: 600 }}>
+        <Card className={classes.card}>
             <ExpansionPanel>
                 <ExpansionPanelSummary
                     expandIcon={<ExpandMore />}>
-                    <div style={{
-                        display: "flex", alignItems: "center",
-                        justifyContent: "space-between",
-                        width: "100%", height: 48
-                    }}>
+                    <div className={classes.header}>
                         <Typography>UX Charts</Typography>
                     </div>
                 </ExpansionPanelSummary>
-                <ExpansionPanelDetails style={{ padding: 0 }}>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                <ExpansionPanelDetails className={classes.panel}>
+                    <div className={classes.details}>
                         {
                             charts.map(({ render }, index) =>
-                                <div key={`metric-${uxKey}-${index}`}
-                                    style={{
-                                        display: "flex", flexDirection: "row",
-                                        alignItems: "center",
-                                    }}>
+                                <div className={classes.chart}
+                                    key={`metric-${uxKey}-${index}`}>
                                     {render(model)}
                                 </div>
                             )

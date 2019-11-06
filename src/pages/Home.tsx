@@ -1,9 +1,8 @@
 import React from 'react';
-import { Grid, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Tabs, Tab, Button, Fab } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 import DataManagement from 'panels/DataManagement';
 import DataMetrics from 'panels/DataMetrics';
-import { CloudUpload, CloudDownload } from '@material-ui/icons';
 import DataChart from 'panels/DataChart';
 
 

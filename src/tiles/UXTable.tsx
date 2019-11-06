@@ -1,19 +1,41 @@
-import React, { useEffect } from "react";
-import { UXKey } from "model/ux";
+import React from "react";
 import { ModelProvider } from "components/wrappers/ModelWrapper";
-import { Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton, Button, Divider, Tooltip } from "@material-ui/core";
+import { Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton, Button, Divider, Tooltip, makeStyles, Theme, createStyles } from "@material-ui/core";
 import NumberField from "components/NumberField";
-import { autorun } from "mobx";
 import { observer } from "mobx-react-lite";
 import InputField from "components/InputField";
 import { Clear } from "@material-ui/icons";
 import NumericField from "components/NumericField";
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        card: {
+            margin: 8, minWidth: 600
+        },
+        header: {
+            display: "flex", alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%", height: 48
+        },
+        panel: {
+            padding: 0,
+        },
+        details: {
+            display: "flex", flexDirection: "column"
+        },
+        chart: {
+            display: "flex", flexDirection: "row",
+            alignItems: "center",
+        }
+    })
+);
 
 interface IUXTableProps { }
 
 const colorHover = "#ECEFF1"
 const colorBlank = "#FFFFFF"
 const UXTable: React.FC<IUXTableProps> = observer(() => {
+    const classes = useStyles();
     const { model, uxKey } = React.useContext(ModelProvider);
     const [hover, setHover] = React.useState<[number | null, number | null]>([null, null]);
 
@@ -69,6 +91,7 @@ const UXTable: React.FC<IUXTableProps> = observer(() => {
                 <TableCell component="th" scope="row" style={{
                     whiteSpace: "nowrap",
                     position: "sticky",
+                    zIndex: 10,
                     left: 0,
                     backgroundColor: hover[0] == sindex ?
                         colorHover : colorBlank,
@@ -127,25 +150,28 @@ const UXTable: React.FC<IUXTableProps> = observer(() => {
         ))
     )
 
+    const renderControls = () => (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row" }}>
+            <NumericField
+                min={0}
+                label={"users"}
+                value={model.users.length}
+                onChangeEvent={(value) => model.setUsersAndScenarios(value, model.scenarios.length)}
+            />
+
+            <Clear />
+            <NumericField
+                min={0}
+                label={"scenarios"}
+                value={model.scenarios.length}
+                onChangeEvent={(value) => model.setUsersAndScenarios(model.users.length, value)}
+            />
+        </div>
+    )
+
     return (
         <div style={{ width: "100%" }}>
-
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row" }}>
-                <NumericField
-                    min={0}
-                    label={"users"}
-                    value={model.users.length}
-                    onChangeEvent={(value) => model.setUsersAndScenarios(value, model.scenarios.length)}
-                />
-
-                <Clear />
-                <NumericField
-                    min={0}
-                    label={"scenarios"}
-                    value={model.scenarios.length}
-                    onChangeEvent={(value) => model.setUsersAndScenarios(model.users.length, value)}
-                />
-            </div>
+            {renderControls()}
             <Divider variant="middle" />
             <div style={{
                 maxHeight: "60vh",

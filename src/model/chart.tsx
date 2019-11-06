@@ -13,7 +13,6 @@ abstract class AChart {
     }
 
     abstract render(ux: IUX): React.ReactNode
-    //abstract visualize(ux: IUX): number
 }
 
 class ChartSuccess extends AChart {

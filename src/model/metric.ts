@@ -11,7 +11,6 @@ abstract class AMetrics {
 
     abstract get img(): string;
     abstract calculate(ux: IUX): number
-    //abstract visualize(ux: IUX): number
 }
 
 class UXSuccess extends AMetrics {
@@ -67,9 +66,6 @@ class UXTime extends AMetrics {
     calculate(ux: IUX): number {
         const data = ux.getData("time")
         const expert = ux.getExpert("time")
-        const { users, scenarios } = ux;
-        const u = users.length || 1;
-        const s = scenarios.length || 1;
 
         let userTime = 0;
         let expertTime = 0;

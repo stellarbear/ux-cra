@@ -17,31 +17,26 @@ interface IModelProvider {
     importData: (e: React.ChangeEvent<HTMLInputElement>) => void,
 }
 
-interface IIterations {
-    data: IUX[];
-    current: number;
-}
-
-const iterationsDefault = (): IIterations => ({
-    data: [new UX()],
-    current: 0
-})
-
 const ModelProvider = React.createContext({} as IModelProvider);
 
 interface IModelWrapperProps { }
 const local = "uxModel"
+const getLocal = (): IUX[] => {
+    try {
+        return JSON.parse(localStorage.getItem(local) || "[]")
+    } catch {
+        return [];
+    }
+}
+const setLocal = (items: IUX[]) =>
+    localStorage.setItem(local, JSON.stringify(items))
 
 const ModelWrapper: React.FC<IModelWrapperProps> = observer(({ children }) => {
-    const getLocal = (): IUX[] =>
-        JSON.parse(localStorage.getItem(local) || "[]")
-    const setLocal = (items: IUX[]) =>
-        localStorage.setItem(local, JSON.stringify(items))
-
     const [loading, setLoading] = React.useState<boolean>(true);
-    const [iterations, setIterations] = React.useState<IIterations>(iterationsDefault());
+    const [iterations, setIterations] = React.useState<IUX[]>([new UX()]);
+    const [current, setCurrent] = React.useState<number>(0);
     const [uxKey, setUxKey] = React.useState<UXKey>(UXKeys[0]);
-    const model = iterations.data[iterations.current];
+    const model = iterations[current];
 
     const exportData = () => {
         const dataJson = JSON.stringify(iterations);
@@ -62,7 +57,8 @@ const ModelWrapper: React.FC<IModelWrapperProps> = observer(({ children }) => {
 
     const clearData = () => {
         setLocal([]);
-        setIterations(iterationsDefault())
+        setCurrent(0);
+        setIterations([new UX()])
     }
 
     const deserialize = (input: IUX[]): IUX[] => {
@@ -82,39 +78,30 @@ const ModelWrapper: React.FC<IModelWrapperProps> = observer(({ children }) => {
     }
 
     useEffect(() => {
+        setCurrent(0);
         setLoading(false);
-        setIterations({
-            data: deserialize(getLocal()),
-            current: 0
-        })
+        setIterations(deserialize(getLocal()))
     }, []);
 
     useEffect(() => autorun(() => {
         console.log("changes!")
-        setLocal(iterations.data);
+        setLocal(iterations);
     }), [model])
 
 
     const handleKeyChange = (key: UXKey) => setUxKey(key);
 
-    const handleIterationChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-        setIterations({
-            ...iterations, current: newValue
-        })
-    };
+    const handleIterationChange = (event: React.ChangeEvent<{}>, newValue: number) => setCurrent(newValue);
 
     const addIteration = () => {
-        setIterations({
-            data: [...iterations.data, new UX()],
-            current: iterations.data.length
-        })
+        setCurrent(iterations.length);
+        setIterations([...iterations, new UX()])
     }
+
     const removeIteration = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => {
         event.stopPropagation();
-        setIterations({
-            data: removeAt(iterations.data, index),
-            current: 0
-        })
+        setCurrent(0);
+        setIterations(removeAt(iterations, index));
     }
 
     if (loading) {
@@ -125,54 +112,64 @@ const ModelWrapper: React.FC<IModelWrapperProps> = observer(({ children }) => {
         )
     }
 
-    return (
-        <div>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <Tabs
-                    textColor="primary"
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    indicatorColor="primary"
-                    value={iterations.current} onChange={handleIterationChange}>
-                    {iterations.data.map((iteration, index) =>
-                        <Tab
-                            component="div"
-                            key={`iteration-tab-${index}`}
-                            label={
-                                <div style={{ display: "flex", alignItems: "center" }}>
-                                    <Typography variant="button" style={{ padding: "0px 8px 0px 16px" }}>
-                                        {`${index} iteration`}
-                                    </Typography>
-                                    <Tooltip title="Remove iteration">
+    const buildIterationTabs = () => (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <Tabs
+                textColor="primary"
+                variant="scrollable"
+                scrollButtons="auto"
+                indicatorColor="primary"
+                value={current} onChange={handleIterationChange}>
+                {iterations.map((_, index) =>
+                    <Tab
+                        component="div"
+                        key={`iteration-tab-${index}`}
+                        label={
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                                <Typography variant="button" style={{ padding: "0px 8px 0px 16px" }}>
+                                    {`${index} iteration`}
+                                </Typography>
+                                <Tooltip title="Remove iteration">
+                                    <span>
                                         <IconButton
-                                            disabled={iterations.data.length == 1 && index == 0}
+                                            disabled={iterations.length == 1 && index == 0}
                                             onClick={(event) => removeIteration(event, index)}>
                                             <Clear />
                                         </IconButton>
-                                    </Tooltip>
-                                </div>}
-                        />
-                    )}
-                </Tabs>
-                <Tooltip title="Add new iteration">
-                    <IconButton onClick={() => addIteration()}>
-                        <AddCircle />
-                    </IconButton>
-                </Tooltip>
-            </div>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <Tabs
-                    textColor="primary"
-                    indicatorColor="primary"
-                    value={UXKeys.indexOf(uxKey)}>
-                    {(UXKeys.map((uxKey, index) =>
-                        <Tab
-                            key={`tab-${uxKey}`}
-                            label={uxKey.toUpperCase()}
-                            onClick={() => handleKeyChange(uxKey)} />
-                    ))}
-                </Tabs>
-            </div>
+                                    </span>
+                                </Tooltip>
+                            </div>}
+                    />
+                )}
+            </Tabs>
+            <Tooltip title="Add new iteration">
+                <IconButton onClick={() => addIteration()}>
+                    <AddCircle />
+                </IconButton>
+            </Tooltip>
+        </div>
+    )
+
+    const buildMetricTabs = () => (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <Tabs
+                textColor="primary"
+                indicatorColor="primary"
+                value={UXKeys.indexOf(uxKey)}>
+                {(UXKeys.map((uxKey, index) =>
+                    <Tab
+                        key={`tab-${uxKey}`}
+                        label={uxKey.toUpperCase()}
+                        onClick={() => handleKeyChange(uxKey)} />
+                ))}
+            </Tabs>
+        </div>
+    )
+
+    return (
+        <div>
+            {buildIterationTabs()}
+            {buildMetricTabs()}
             <ModelProvider.Provider value={{ model, uxKey, exportData, importData, clearData }}>
                 {children}
             </ModelProvider.Provider>

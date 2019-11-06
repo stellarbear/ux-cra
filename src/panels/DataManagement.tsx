@@ -1,15 +1,31 @@
-import React, { useEffect } from 'react';
-import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Card, Typography, IconButton, Button, Divider, Tooltip } from '@material-ui/core';
+import React from 'react';
+import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Card, Typography, IconButton, Button, Divider, Tooltip, makeStyles, Theme, createStyles } from '@material-ui/core';
 
 import { ExpandMore, Clear, CloudUpload, CloudDownload } from '@material-ui/icons';
 import { ModelProvider } from 'components/wrappers/ModelWrapper';
 import UXTable from 'tiles/UXTable';
-import { autorun } from 'mobx';
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        card: {
+            margin: 8, minWidth: 600
+        },
+        header: {
+            display: "flex", alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%", height: 48
+        },
+        panel: {
+            padding: 0, maxWidth: "calc(100vw - 16px)"
+        },
+    })
+);
 
 interface IDataManagementProps { }
 
 const DataManagement: React.FC<IDataManagementProps> = () => {
     const { importData, exportData, clearData } = React.useContext(ModelProvider);
+    const classes = useStyles();
 
     const onImport = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.stopPropagation(); importData(event);
@@ -22,15 +38,11 @@ const DataManagement: React.FC<IDataManagementProps> = () => {
     }
 
     return (
-        <Card style={{ margin: 8, minWidth: 600 }}>
+        <Card className={classes.card}>
             <ExpansionPanel defaultExpanded={true}>
                 <ExpansionPanelSummary
                     expandIcon={<ExpandMore />}>
-                    <div style={{
-                        display: "flex", alignItems: "center",
-                        justifyContent: "space-between",
-                        width: "100%", height: 48
-                    }}>
+                    <div className={classes.header}>
                         <Typography> Data managment</Typography>
                         <div>
                             <Tooltip title="Clear data">
@@ -58,7 +70,7 @@ const DataManagement: React.FC<IDataManagementProps> = () => {
                     </div>
                 </ExpansionPanelSummary>
                 <Divider variant="middle" />
-                <ExpansionPanelDetails style={{ padding: 0, maxWidth: "calc(100vw - 16px)" }}>
+                <ExpansionPanelDetails className={classes.panel}>
                     <UXTable />
                 </ExpansionPanelDetails>
             </ExpansionPanel >

@@ -1,5 +1,5 @@
 import { IObservation, Observation } from "./observation";
-import { decorate, observable, computed, action } from 'mobx'
+import { decorate, observable, action } from 'mobx'
 import { removeAt } from "auxiliary/array";
 
 const UXKeys = ["result", "time", "actions"] as const;
