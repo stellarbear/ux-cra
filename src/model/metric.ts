@@ -84,7 +84,7 @@ class UXTime extends AMetrics {
             }
         }
 
-        let result = Number((expertTime * 100 / userTime).toFixed(2));
+        let result = Number((expertTime * 100 / (userTime || 1)).toFixed(2));
 
         return result;
     }

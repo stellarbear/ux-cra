@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { UXKey } from "model/ux";
 import { ModelProvider } from "components/wrappers/ModelWrapper";
-import { Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton, Button, Divider } from "@material-ui/core";
+import { Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton, Button, Divider, Tooltip } from "@material-ui/core";
 import NumberField from "components/NumberField";
 import { autorun } from "mobx";
 import { observer } from "mobx-react-lite";
@@ -16,14 +16,6 @@ const colorBlank = "#FFFFFF"
 const UXTable: React.FC<IUXTableProps> = observer(() => {
     const { model, uxKey } = React.useContext(ModelProvider);
     const [hover, setHover] = React.useState<[number | null, number | null]>([null, null]);
-
-    const [usersLocal, setUsers] = React.useState(0);
-    const [scenariosLocal, setScenarios] = React.useState(0);
-
-    useEffect(() => {
-        setUsers(model.users.length)
-        setScenarios(model.scenarios.length)
-    }, [])
 
     const data = model.getData(uxKey)
     const expert = model.getExpert(uxKey)
@@ -47,11 +39,13 @@ const UXTable: React.FC<IUXTableProps> = observer(() => {
                             key={`${uxKey}-${uindex}-input`}
                             value={user}
                             adornment={
-                                <IconButton size="small"
-                                    onClick={() => model.removeUser(uindex)}
-                                >
-                                    <Clear />
-                                </IconButton>
+                                <Tooltip title="Remove user">
+                                    <IconButton size="small"
+                                        onClick={() => model.removeUser(uindex)}
+                                    >
+                                        <Clear />
+                                    </IconButton>
+                                </Tooltip>
                             }
                             onChangeEvent={(value) => model.changeUser(uindex, value)}
                         />
@@ -85,12 +79,14 @@ const UXTable: React.FC<IUXTableProps> = observer(() => {
                         key={`${uxKey}-${sindex}-input`}
                         value={scenario}
                         adornment={
-                            <IconButton size="small"
-                            tabIndex={-1}
-                                onClick={() => model.removeScenario(sindex)}
-                            >
-                                <Clear />
-                            </IconButton>
+                            <Tooltip title="Remove scenario">
+                                <IconButton size="small"
+                                    tabIndex={-1}
+                                    onClick={() => model.removeScenario(sindex)}
+                                >
+                                    <Clear />
+                                </IconButton>
+                            </Tooltip>
                         }
                         onChangeEvent={(value) => model.changeScenario(sindex, value)}
                     />
@@ -138,7 +134,7 @@ const UXTable: React.FC<IUXTableProps> = observer(() => {
                 <NumericField
                     min={0}
                     label={"users"}
-                    value={usersLocal}
+                    value={model.users.length}
                     onChangeEvent={(value) => model.setUsersAndScenarios(value, model.scenarios.length)}
                 />
 
@@ -146,7 +142,7 @@ const UXTable: React.FC<IUXTableProps> = observer(() => {
                 <NumericField
                     min={0}
                     label={"scenarios"}
-                    value={scenariosLocal}
+                    value={model.scenarios.length}
                     onChangeEvent={(value) => model.setUsersAndScenarios(model.users.length, value)}
                 />
             </div>

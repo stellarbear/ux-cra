@@ -4,11 +4,11 @@ import { Grid, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Tab
 import { ExpandMore } from '@material-ui/icons';
 import { ModelProvider } from 'components/wrappers/ModelWrapper';
 import { AMetrics } from 'model/metric';
+import { observer } from 'mobx-react-lite';
 
 interface IDataMetricsProps { }
 
-const DataMetrics: React.FC<IDataMetricsProps> = () => {
-    const [tab, setTab] = React.useState(0);
+const DataMetrics: React.FC<IDataMetricsProps> = observer(() => {
     const { model, uxKey } = React.useContext(ModelProvider);
 
     const metrics = AMetrics.for(uxKey);
@@ -52,6 +52,6 @@ const DataMetrics: React.FC<IDataMetricsProps> = () => {
             </ExpansionPanel>
         </Card>
     );
-}
+})
 
 export default DataMetrics;

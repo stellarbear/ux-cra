@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { IUX, UX, ObservationList, UXKey, UXKeys } from "model/ux";
 import { observer } from "mobx-react-lite";
 import { autorun } from 'mobx'
-import { Tabs, Tab, IconButton, Typography, CircularProgress, AppBar } from "@material-ui/core";
+import { Tabs, Tab, IconButton, Typography, CircularProgress, AppBar, Tooltip } from "@material-ui/core";
 import { AddCircle, Clear } from "@material-ui/icons";
 import { Observation } from "model/observation";
 import { removeAt } from "auxiliary/array";
@@ -143,18 +143,22 @@ const ModelWrapper: React.FC<IModelWrapperProps> = observer(({ children }) => {
                                     <Typography variant="button" style={{ padding: "0px 8px 0px 16px" }}>
                                         {`${index} iteration`}
                                     </Typography>
-                                    <IconButton
-                                        disabled={iterations.data.length == 1 && index == 0}
-                                        onClick={(event) => removeIteration(event, index)}>
-                                        <Clear />
-                                    </IconButton>
+                                    <Tooltip title="Remove iteration">
+                                        <IconButton
+                                            disabled={iterations.data.length == 1 && index == 0}
+                                            onClick={(event) => removeIteration(event, index)}>
+                                            <Clear />
+                                        </IconButton>
+                                    </Tooltip>
                                 </div>}
                         />
                     )}
                 </Tabs>
-                <IconButton onClick={() => addIteration()}>
-                    <AddCircle />
-                </IconButton>
+                <Tooltip title="Add new iteration">
+                    <IconButton onClick={() => addIteration()}>
+                        <AddCircle />
+                    </IconButton>
+                </Tooltip>
             </div>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <Tabs

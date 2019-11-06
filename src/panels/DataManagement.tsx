@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Card, Typography, IconButton, Button, Divider } from '@material-ui/core';
+import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Card, Typography, IconButton, Button, Divider, Tooltip } from '@material-ui/core';
 
 import { ExpandMore, Clear, CloudUpload, CloudDownload } from '@material-ui/icons';
 import { ModelProvider } from 'components/wrappers/ModelWrapper';
@@ -9,7 +9,6 @@ import { autorun } from 'mobx';
 interface IDataManagementProps { }
 
 const DataManagement: React.FC<IDataManagementProps> = () => {
-    const { model, uxKey } = React.useContext(ModelProvider);
     const { importData, exportData, clearData } = React.useContext(ModelProvider);
 
     const onImport = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,17 +33,23 @@ const DataManagement: React.FC<IDataManagementProps> = () => {
                     }}>
                         <Typography> Data managment</Typography>
                         <div>
-                            <IconButton color="primary" onClick={onClear}>
-                                <Clear />
-                            </IconButton>
-                            <IconButton color="primary" onClick={onExport}>
-                                <CloudUpload />
-                            </IconButton>
+                            <Tooltip title="Clear data">
+                                <IconButton color="primary" onClick={onClear}>
+                                    <Clear />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Export data">
+                                <IconButton color="primary" onClick={onExport}>
+                                    <CloudUpload />
+                                </IconButton>
+                            </Tooltip>
 
                             <label htmlFor="export-ux">
-                                <IconButton component="span" color="primary">
-                                    <CloudDownload />
-                                </IconButton>
+                                <Tooltip title="Import data">
+                                    <IconButton component="span" color="primary">
+                                        <CloudDownload />
+                                    </IconButton>
+                                </Tooltip>
                             </label>
                             <input hidden type="file" id="export-ux"
                                 onChange={onImport}
