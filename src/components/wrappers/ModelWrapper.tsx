@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { IUX, UX, ObservationList, UXKey, UXKeys } from "model/ux";
 import { observer } from "mobx-react-lite";
 import { autorun } from 'mobx'
-import { Tabs, Tab, IconButton, Typography, CircularProgress, AppBar, Tooltip } from "@material-ui/core";
+import { Tabs, Tab, IconButton, Typography, CircularProgress, Tooltip } from "@material-ui/core";
 import { AddCircle, Clear } from "@material-ui/icons";
 import { Observation } from "model/observation";
 import { removeAt } from "auxiliary/array";
@@ -63,10 +63,10 @@ const ModelWrapper: React.FC<IModelWrapperProps> = observer(({ children }) => {
 
     const deserialize = (input: IUX[]): IUX[] => {
         try {
-            input = input.map((d: any) => Object.assign(new UX, d));
+            input = input.map((d: any) => Object.assign(new UX(), d));
             input.forEach((o: IUX) => o.observations = Object.keys(o.observations)
                 .reduce((acc, cur) =>
-                    ({ ...acc, [cur]: Object.assign(new Observation, (o.observations as any)[cur]) }),
+                    ({ ...acc, [cur]: Object.assign(new Observation(), (o.observations as any)[cur]) }),
                     {} as ObservationList));
 
             input = input.length > 0 ? input : [new UX()];
@@ -84,10 +84,8 @@ const ModelWrapper: React.FC<IModelWrapperProps> = observer(({ children }) => {
     }, []);
 
     useEffect(() => autorun(() => {
-        console.log("changes!")
         setLocal(iterations);
-    }), [model])
-
+    }), [model, iterations])
 
     const handleKeyChange = (key: UXKey) => setUxKey(key);
 
@@ -95,13 +93,19 @@ const ModelWrapper: React.FC<IModelWrapperProps> = observer(({ children }) => {
 
     const addIteration = () => {
         setCurrent(iterations.length);
-        setIterations([...iterations, new UX()])
+        const newIterations = [...iterations, new UX()];
+
+        setIterations(newIterations)
+        setLocal(newIterations);
     }
 
     const removeIteration = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => {
         event.stopPropagation();
         setCurrent(0);
-        setIterations(removeAt(iterations, index));
+
+        const newIterations = removeAt(iterations, index);
+        setIterations(newIterations);
+        setLocal(newIterations);
     }
 
     if (loading) {
@@ -132,7 +136,7 @@ const ModelWrapper: React.FC<IModelWrapperProps> = observer(({ children }) => {
                                 <Tooltip title="Remove iteration">
                                     <span>
                                         <IconButton
-                                            disabled={iterations.length == 1 && index == 0}
+                                            disabled={iterations.length === 1 && index === 0}
                                             onClick={(event) => removeIteration(event, index)}>
                                             <Clear />
                                         </IconButton>

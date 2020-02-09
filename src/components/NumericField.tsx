@@ -63,12 +63,12 @@ const NumericField = ({
 		
 		setMinus(false);
 		setEmpty(false);
-		if (value == "") {
+		if (value === "") {
 			setEmpty(true);
 			onChangeEvent(0);
 			setNum(0);
 		}
-		else if (value == "-") {
+		else if (value === "-") {
 			setMinus(true);
 			onChangeEvent(0);
 			setNum(0);

@@ -1,6 +1,8 @@
 {
-  "name": "ux-cra",
-  "version": "0.1.0",
+  "name": "ux-metrics",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "stellarbears",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.5.2",

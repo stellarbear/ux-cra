@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Tabs, Tab, Card, Typography, Divider, makeStyles, Theme, createStyles } from '@material-ui/core';
+import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Card, Typography, Divider, makeStyles, Theme, createStyles } from '@material-ui/core';
 
 import { ExpandMore } from '@material-ui/icons';
 import { ModelProvider } from 'components/wrappers/ModelWrapper';
@@ -20,11 +20,11 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: 0,
         },
         details: {
-            display: "flex", flexDirection: "column"
+            display: "flex", flexDirection: "column", width: "100%",
         },
         metric: {
-            display: "flex", flexDirection: "row",
-            alignItems: "center",
+            display: "flex", flexDirection: "row", width: "100%",
+            alignItems: "center", justifyContent: "center"
         },
         image: {
             opacity: 0.6
@@ -55,7 +55,9 @@ const DataMetrics: React.FC<IDataMetricsProps> = observer(() => {
                         {
                             metrics.map(({ img, calculate }, index) =>
                                 <div key={`metric-${uxKey}-${index}`} className={classes.metric}>
-                                    <img className={classes.image}
+                                    <img
+                                        alt="asset"
+                                        className={classes.image}
                                         height={128}
                                         src={require(`assets/metrics/${img}.png`)}
                                         onError={(e) => { }} />

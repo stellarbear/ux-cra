@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Card, Typography, IconButton, Button, Divider, Tooltip, makeStyles, Theme, createStyles } from '@material-ui/core';
+import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Card, Typography, IconButton, Divider, Tooltip, makeStyles, Theme, createStyles } from '@material-ui/core';
 
 import { ExpandMore, Clear, CloudUpload, CloudDownload } from '@material-ui/icons';
 import { ModelProvider } from 'components/wrappers/ModelWrapper';

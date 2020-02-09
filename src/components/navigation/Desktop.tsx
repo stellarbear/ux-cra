@@ -1,7 +1,5 @@
-import { AppBar, Toolbar, makeStyles, Theme, createStyles, Button, } from "@material-ui/core";
+import { AppBar, Toolbar, makeStyles, Theme, createStyles, Typography, } from "@material-ui/core";
 import React from "react";
-import { GitHub } from "@material-ui/icons";
-import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -15,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: "0px 48px",
             width: "92vw",
             display: "flex",
-            justifyContent: "center",
+            justifyContent: "flex-start",
             alignItems: "center"
         },
         right: {
@@ -33,12 +31,15 @@ const Desktop: React.FC<IDesktop> = ({
     handleNavigation
 }) => {
     const classes = useStyles();
-    const { t } = useTranslation();
     const navigate = (destination: string) => handleNavigation(destination);
 
     const renderNavigation = () => (
         <React.Fragment>
-            <img height={48} width={48} src={`/logo192.png`} onClick={() => navigate('/home')} />
+            <img alt="logo" height={48} width={48} src={`/logo.png`} onClick={() => navigate('/home')} />
+            <div>
+                <Typography variant='h5' color='inherit' style={{ marginLeft: 20 }}>UX Metrics</Typography>
+                <Typography variant='caption' style={{ marginLeft: 20 }}>@stellarbears</Typography>
+            </div>
         </React.Fragment>
     );
 

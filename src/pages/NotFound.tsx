@@ -6,7 +6,7 @@ const NotFound: React.FC = (): JSX.Element => {
 	const { t, i18n } = useTranslation();
 	const { language } = i18n;
 
-	useEffect((): void => window.history.replaceState("", "", `/${language}/404`), []);
+	useEffect((): void => window.history.replaceState("", "", `/${language}/404`), [language]);
 
 	return (
 		<Grid container

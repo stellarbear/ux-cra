@@ -1,41 +1,17 @@
 import React from "react";
 import { ModelProvider } from "components/wrappers/ModelWrapper";
-import { Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton, Button, Divider, Tooltip, makeStyles, Theme, createStyles } from "@material-ui/core";
+import { Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton, Divider, Tooltip } from "@material-ui/core";
 import NumberField from "components/NumberField";
 import { observer } from "mobx-react-lite";
 import InputField from "components/InputField";
 import { Clear } from "@material-ui/icons";
 import NumericField from "components/NumericField";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        card: {
-            margin: 8, minWidth: 600
-        },
-        header: {
-            display: "flex", alignItems: "center",
-            justifyContent: "space-between",
-            width: "100%", height: 48
-        },
-        panel: {
-            padding: 0,
-        },
-        details: {
-            display: "flex", flexDirection: "column"
-        },
-        chart: {
-            display: "flex", flexDirection: "row",
-            alignItems: "center",
-        }
-    })
-);
-
 interface IUXTableProps { }
 
 const colorHover = "#ECEFF1"
 const colorBlank = "#FFFFFF"
 const UXTable: React.FC<IUXTableProps> = observer(() => {
-    const classes = useStyles();
     const { model, uxKey } = React.useContext(ModelProvider);
     const [hover, setHover] = React.useState<[number | null, number | null]>([null, null]);
 
@@ -51,7 +27,7 @@ const UXTable: React.FC<IUXTableProps> = observer(() => {
                     <TableCell
                         style={{
                             padding: "8px 8px 0px 0px",
-                            backgroundColor: hover[1] == uindex ?
+                            backgroundColor: hover[1] === uindex ?
                                 colorHover : colorBlank,
                             transition: "background-color 256ms linear"
                         }}
@@ -93,7 +69,7 @@ const UXTable: React.FC<IUXTableProps> = observer(() => {
                     position: "sticky",
                     zIndex: 10,
                     left: 0,
-                    backgroundColor: hover[0] == sindex ?
+                    backgroundColor: hover[0] === sindex ?
                         colorHover : colorBlank,
                     transition: "background-color 256ms linear"
                 }}>
@@ -119,7 +95,7 @@ const UXTable: React.FC<IUXTableProps> = observer(() => {
                         <TableCell
                             style={{
                                 padding: 0,
-                                backgroundColor: hover[1] == uindex || hover[0] == sindex ?
+                                backgroundColor: hover[1] === uindex || hover[0] === sindex ?
                                     colorHover : colorBlank,
                                 transition: "background-color 256ms linear"
                             }}

@@ -1,5 +1,5 @@
 import React from "react";
-import { TextField, InputAdornment, IconButton, makeStyles, Theme, createStyles } from "@material-ui/core";
+import { TextField, makeStyles, Theme, createStyles } from "@material-ui/core";
 import { BaseTextFieldProps } from "@material-ui/core/TextField";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -33,7 +33,7 @@ const NumberField = ({
 
     const onNumberChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         const { value } = event.target;
-        onChangeEvent(value == "" ? null : parseFloat(value));
+        onChangeEvent(value === "" ? null : parseFloat(value));
     }
 
     const onKeyDown = ({ keyCode, preventDefault }: React.KeyboardEvent<HTMLDivElement>) => {

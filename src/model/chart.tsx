@@ -18,10 +18,10 @@ abstract class AChart {
 class ChartSuccess extends AChart {
     render(ux: IUX): React.ReactNode {
         const data = ux.getData("result")
-        const { users, scenarios } = ux;
+        const { users } = ux;
 
-        const success = data.map(user => user.reduce((acc: number, cur) => acc + (cur == 1 ? 1 : 0), 0))
-        const failure = data.map(user => user.reduce((acc: number, cur) => acc + (cur != 1 ? 1 : 0), 0))
+        const success = data.map(user => user.reduce((acc: number, cur) => acc + (cur === 1 ? 1 : 0), 0))
+        const failure = data.map(user => user.reduce((acc: number, cur) => acc + (cur !== 1 ? 1 : 0), 0))
 
         return (
             <HighchartsReact

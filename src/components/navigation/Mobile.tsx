@@ -1,7 +1,7 @@
 import React from "react";
 import { AppBar, Button, Divider, Drawer, IconButton, Toolbar, Typography } from "@material-ui/core";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import { Clear, Menu, GitHub } from "@material-ui/icons";
+import { Clear, Menu } from "@material-ui/icons";
 import ElevationScroll from "components/ElevationScroll";
 import { useTranslation } from "react-i18next";
 
@@ -86,7 +86,10 @@ const Mobile: React.FC<IMobile> = ({
                         <div className={classes.toolbar}>
                             {MenuButton()}
                             <div className={classes.menu}>
+                                <Typography variant='h6' color='inherit' style={{ marginRight: 20 }}>UX Metrics</Typography>
                                 <img
+                                style={{ marginRight: 20 }}
+                                    alt="logo"
                                     src={`/logo.png`}
                                     height={32} width={32}
                                     onClick={() => navigate('/home')} />

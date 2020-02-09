@@ -1,6 +1,6 @@
 import React from 'react';
 import { Home, NotFound } from 'pages';
-import { Route, Redirect, Router, BrowserRouter } from 'react-router-dom';
+import { Route, Redirect, BrowserRouter } from 'react-router-dom';
 import AnimatedSwitch from 'components/AnimatedSwitch';
 import { NavigationWrapper, NotifyWrapper } from 'components';
 import { ModelWrapper } from 'components/wrappers/ModelWrapper';
