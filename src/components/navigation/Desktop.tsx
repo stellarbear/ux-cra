@@ -4,8 +4,7 @@ import React from "react";
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         appBar: {
-            width: "100vw",
-            left: 0
+            margin: 8,
         },
         toolbar: {
             margin: 8,
@@ -37,7 +36,7 @@ const Desktop: React.FC<IDesktop> = ({
         <React.Fragment>
             <img alt="logo" height={48} width={48} src={`/logo.png`} onClick={() => navigate('/home')} />
             <div>
-                <Typography variant='h5' color='inherit' style={{ marginLeft: 20 }}>UX Metrics</Typography>
+                <Typography variant='h5' color='inherit' style={{ marginLeft: 20 }}>UX Metrics (ISO-9241)</Typography>
                 <Typography variant='caption' style={{ marginLeft: 20 }}>@stellarbears</Typography>
             </div>
         </React.Fragment>
